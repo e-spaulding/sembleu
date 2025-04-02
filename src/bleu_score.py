@@ -12,15 +12,9 @@
 
 import math
 import sys
-import fractions
+from fractions import Fraction
 import warnings
 from collections import Counter
-
-try:
-    fractions.Fraction(0, 1000, _normalize=False)
-    from fractions import Fraction
-except TypeError:
-    from nltk.compat import Fraction
 
 from collections import namedtuple
 NgramInst = namedtuple('NgramInst', 'ngram length')
@@ -73,10 +67,10 @@ def corpus_bleu(list_of_references, hypotheses, weights=(0.34, 0.33, 0.33),
         max_gram = max([x for x,y in p_denominators.items() if y > 0])
         if max_gram < len(weights):
             weights = ( 1.0 / max_gram ,) * max_gram
-            print('Auto_reweigh, max-gram is', max_gram, 'new weight is', weights)
+            # print('Auto_reweigh, max-gram is', max_gram, 'new weight is', weights)
 
     # Collects the various precision values for the different ngram orders.
-    p_n = [Fraction(p_numerators[i], p_denominators[i], _normalize=False)
+    p_n = [Fraction(p_numerators[i], p_denominators[i])
            for i, _ in enumerate(weights, start=1)]
 
     # Returns 0 if there's no matching n-grams
@@ -128,7 +122,7 @@ def modified_precision_amr(references, hypothesis, n):
     if denominator == 0:
         return None
 
-    return Fraction(numerator, denominator, _normalize=False)
+    return Fraction(numerator, denominator)
 
 
 def closest_ref_length_amr(references, hyp_len):
@@ -245,7 +239,7 @@ class SmoothingFunction:
         machine translation quality using longest common subsequence and
         skip-bigram statistics. In ACL04.
         """
-        return [Fraction(p_i.numerator + 1, p_i.denominator + 1, _normalize=False) for p_i in p_n]
+        return [Fraction(p_i.numerator + 1, p_i.denominator + 1) for p_i in p_n]
 
     def method3(self, p_n, *args, **kwargs):
         """

@@ -52,11 +52,11 @@ if __name__ == '__main__':
     if len(sys.argv) < 3:
         print('python this-script ans-file ref-file')
         sys.exit(0)
-    print('loading ...')
+    # print('loading ...')
     hypothesis = get_amr_ngrams(sys.argv[1])
     references = [[x] for x in get_amr_ngrams(sys.argv[2])]
     smoofunc = getattr(SmoothingFunction(), 'method3')
-    print('evaluating ...')
+    # print('evaluating ...')
     st = time.time()
     if len(sys.argv) == 4:
         n = int(sys.argv[3])
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     else:
         weights = (0.34, 0.33, 0.34)
     print(corpus_bleu(references, hypothesis, weights=weights, smoothing_function=smoofunc, auto_reweigh=True))
-    print('time:', time.time()-st, 'secs')
+    # print('time:', time.time()-st, 'secs')
